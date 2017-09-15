@@ -1,0 +1,89 @@
+
+# coding: utf-8
+
+# In[1]:
+
+births = open("US_births_1994-2003_CDC_NCHS.csv").read()
+births_split = births.split("\n")
+print(births_split[0:10])
+
+
+# In[36]:
+
+def read_csv (string):
+    f = open(string).read()
+    split_f = f.split("\n")
+    string_list = split_f[1:len(split_f)]
+    final_list = []
+    for element in string_list:
+        string_fields = element.split(",")
+        int_fields = []
+        for element2 in string_fields:
+            integer = int(element2)
+            int_fields.append(integer)
+        final_list.append(int_fields)
+    return(final_list)
+
+cdc_list = read_csv("US_births_1994-2003_CDC_NCHS.csv")
+print(cdc_list)
+    
+
+
+# In[37]:
+
+def month_births(dataset):
+    births_per_month = {}
+    for element3 in dataset:
+        month = element3[1]
+        births = element3[4]
+        if month in births_per_month:
+            births_per_month[month]=births_per_month[month]+births
+        else:
+            births_per_month[month]=births
+    return(births_per_month)
+cdc_month_births = month_births(cdc_list)
+cdc_month_births
+
+
+# In[39]:
+
+def dow_births(list_of_lists):
+    births_per_day = {}
+    for element4 in list_of_lists:
+        day = element4[3]
+        births = element4[4]
+        if day in births_per_day:
+            births_per_day[day] = births_per_day[day]+births
+        else:
+            births_per_day[day] = births
+    return(births_per_day)
+cdc_day_births = dow_births(cdc_list)
+cdc_day_births
+
+
+# In[44]:
+
+def calc_counts(data, column):
+    births_dict = {}
+    for element5 in data:
+        position = element5[column]
+        births = element5[4]
+        if position in births_dict:
+            births_dict[position] = births_dict[position]+births
+        else:
+            births_dict[position] = births
+    return(births_dict)
+cdc_year_births = calc_counts(cdc_list, 0)
+cdc_month_births = calc_counts(cdc_list, 1)
+cdc_dom_births = calc_counts(cdc_list, 2)
+cdc_dow_births = calc_counts(cdc_list, 3)
+print(cdc_year_births)
+print(cdc_month_births)
+print(cdc_dom_births)
+print(cdc_dow_births)
+
+
+# In[ ]:
+
+
+
